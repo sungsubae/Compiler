@@ -278,6 +278,7 @@ Token get_Token()
         {
             nextToken.cat=Separator;
         }
+        // 다음 문자가 Operator라면 Operator로 가정
         else if(isOperator(nextch))
         {
             if(nextToken.len == 0)
@@ -297,6 +298,7 @@ Token get_Token()
             nextToken.cat=Error;
             nextToken.err=nextToken.len;
         }
+        // 다음 문자를 토큰에 저장한다
         nextToken.token[nextToken.len] = nextch;
         nextToken.len++;
 
@@ -310,7 +312,7 @@ Token get_Token()
         case Keyword:
         case BooleanLit:
         case Identifier:
-            // 다음 문자가 알파벳도 아니고 숫자도 아니라면 종료조건을 만족한다
+            // EOT에 해당하면 제대로된 토큰을 반환
             if(isEOT(nextch))
             {
                 // Identifier가 아니라 키워드중 하나인지 확인 후 카테고리 변경
@@ -327,18 +329,20 @@ Token get_Token()
                 nextToken.token[nextToken.len] = '\0';
                 return nextToken;
             }
+            // 다음 문자가 Identifier에 해당하지 않는 문자이면 오류 처리
             else if(!isAlpha(nextch) && !isDigit(nextch))
             {
                 nextToken.err = nextToken.len;
             }
             break;
         case IntegerLit:
-            // 다음 문자가 숫자도 아니고 '.'도 아니라면 종료조건이다 !!!!! 만약 문자라면 오류인데 어떻게 처리할거지?!!!!!!!!!
+            // EOT에 해당하면 제대로된 토큰을 반환
             if(isEOT(nextch))
             {
                 nextToken.token[nextToken.len] = '\0';
                 return nextToken;
             }
+            // 다음 문자가 숫자나 .이 아니라면 오류 처리
             else if(!isDigit(nextch) && nextch!='.')
             {
                 nextToken.err = nextToken.len;
@@ -346,12 +350,13 @@ Token get_Token()
             break;
 
         case FloatLit:
-            // 다음 문자가 숫자가 아니라면 종료조건이다.
+            // EOT에 해당하면 제대로된 토큰을 반환
             if(isEOT(nextch))
             {
                 nextToken.token[nextToken.len] = '\0';
                 return nextToken;
             }
+            // 다음 문자가 숫자가 아니라면 오류처리
             else if(!isDigit(nextch))
             {
                 nextToken.err = nextToken.len;
@@ -461,6 +466,7 @@ int main(int argc, char *argv[])
     char line[100];
     Token nextTok;
     // 파일 이름을 입력으로 받아 입력 파일을 연다
+    
     // 커맨드라인 argument로 파일이름이 주어진 경우
     if(argc != 1)
     {
