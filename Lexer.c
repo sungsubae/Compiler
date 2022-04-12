@@ -40,7 +40,7 @@ typedef struct Token {
 // 무시해야 하는 문자인지 확인하는 함수
 int isEOL(char c)
 {
-    return c==' '||c=='\n'||c=='\t';
+    return c==' '||c=='\n'||c=='\t'||c=='\r';
 }
 
 // ASCII 인지 확인하는 함수
@@ -287,7 +287,7 @@ Token get_Token()
             }
         }
         // 공백 무시 처리
-        else if(nextch==' ' || nextch=='\t')
+        else if(nextch==' ' || nextch=='\t' || nextch=='\r')
         {
             nextch = fgetc(fp);
             continue;
