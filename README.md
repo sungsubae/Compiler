@@ -1,2 +1,2 @@
 # Compiler
- Lexical Analyzer and Parser
+ Lexical Analyzer
